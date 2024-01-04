@@ -33,12 +33,11 @@
               <template v-if="isDataFetching">
                 <PokemonListItemLoader v-for="index in 20" :key="index" />
               </template>
-              <template v-else>
+              <template v-else-if="pokemons?.length">
                 <PokemonListItem
                   v-for="pokemon in pokemons"
                   :key="pokemon.name"
-                  :pokemon-list-item="pokemon"
-                  :pokemon-name="pokemon.name"
+                  :pokemon="pokemon"
                 />
               </template>
             </tbody>
@@ -50,12 +49,12 @@
 </template>
 
 <script setup lang="ts">
-import type { PokemonListResponseItem } from '../../types/pokemon'
+import type { Pokemon } from '../../types/pokemon'
 import PokemonListItem from './PokemonListItem.vue'
 import PokemonListItemLoader from './PokemonListItemLoader.vue'
 
 defineProps<{
-  pokemons: PokemonListResponseItem[]
+  pokemons: Pokemon[]
   isDataFetching: boolean
 }>()
 </script>

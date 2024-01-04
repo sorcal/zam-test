@@ -28,7 +28,7 @@ export function useToast(): UseToastReturnType {
     type.value = toastType
     isVisible.value = true
     setTimeout(() => {
-      isVisible.value = false
+      //   isVisible.value = false
     }, duration)
   }
 

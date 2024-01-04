@@ -2,8 +2,8 @@
   <div class="max-w-3xl mx-auto pb-20 w-full px-4 sm:px-6 lg:px-8">
     <h1 class="mt-8 mb-12 text-3xl">Pokemon List</h1>
     <PokemonList
-      :pokemons="pokemonListResponse?.results || []"
-      :is-data-fetching="isFetching"
+      :pokemons="pokemonListData?.data || []"
+      :is-data-fetching="isFetching || pokemonListData?.isFetching"
     />
     <section
       class="mt-4 border-t border-gray-200 pt-4 flex items-center justify-center"
@@ -22,7 +22,11 @@
 <script setup lang="ts">
 import { computed, watch, ref, inject } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { usePokemonListQuery, PAGE_SIZE } from '../services/pokemon'
+import {
+  usePokemonListQuery,
+  PAGE_SIZE,
+  usePokemonListDataQuery,
+} from '../services/pokemon'
 import PokemonList from '../components/pokemons/PokemonList.vue'
 import ListPagination from '../components/common/ListPagination.vue'
 import { ToastType, UseToastReturnType } from '../composables/useToast'
@@ -45,6 +49,8 @@ const {
   isError,
 } = usePokemonListQuery(currentPage)
 
+const pokemonListData = usePokemonListDataQuery(pokemonListResponse)
+
 const pageCount = ref(0)
 
 function setPageCount() {
@@ -64,10 +70,15 @@ watch(
   },
 )
 
+const hasError = computed(() => {
+  return isError.value || pokemonListData.value.isError
+})
+
 watch(
-  () => isError.value,
-  (newValue) => {
-    if (newValue) {
+  () => hasError.value,
+  (value) => {
+    console.log(value)
+    if (value) {
       toast?.showToast('Error loading pokemons', ToastType.error)
     }
   },
