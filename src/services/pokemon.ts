@@ -1,4 +1,4 @@
-import { Ref, computed } from 'vue'
+import { Ref, computed, inject } from 'vue'
 import { useQuery } from '@tanstack/vue-query'
 import type {
   PokemonListResponse,
@@ -33,7 +33,6 @@ export const usePokemonListQuery = (pageRef: Ref<number>) => {
       if (!response.ok) {
         throw new Error('Network response was not ok')
       }
-
       return response.json()
     },
     staleTime: Infinity,

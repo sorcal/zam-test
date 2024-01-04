@@ -79,7 +79,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, watch, inject } from 'vue'
 import { useRoute } from 'vue-router'
 import { usePokemonQuery, PokemonStateName } from '../services/pokemon'
 import HeartIcon from '../icons/HeartIcon.vue'
@@ -94,10 +94,21 @@ import {
   getTypesStringFromPokemon,
   getAbilitiesStringFromPokemon,
 } from '../utils/pokemon'
+import { ToastType, UseToastReturnType } from '../composables/useToast'
 
 const route = useRoute()
 
-const { data: pokemon } = usePokemonQuery(route.params.name as string)
+const { data: pokemon, isError } = usePokemonQuery(route.params.name as string)
+
+const toast = inject<UseToastReturnType>('toast')
+watch(
+  () => isError.value,
+  (newValue) => {
+    if (newValue) {
+      toast?.showToast('Error loading pokemon details', ToastType.error)
+    }
+  },
+)
 
 const iconsComponents = {
   [PokemonStateName.hp]: HeartIcon,
