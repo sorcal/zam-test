@@ -77,6 +77,7 @@ export const usePokemonListDataQuery = (pageRef: Ref<number> = ref(1)) => {
     data: pokemonListResponse,
     isFetching,
     isError,
+    isSuccess,
   } = usePokemonListQuery(pageRef)
 
   const pokemonQueriesOptions = computed(() =>
@@ -99,9 +100,13 @@ export const usePokemonListDataQuery = (pageRef: Ref<number> = ref(1)) => {
     )
 
     const hasError = pokemonListData.value.some((pokemon) => pokemon.isError)
+    const hasAllSuccess = pokemonListData.value.every(
+      (pokemon) => pokemon.isSuccess,
+    )
     return {
       isFetching: isFetching.value || hasFetching,
       isError: isError.value || hasError,
+      isSuccess: isSuccess.value && hasAllSuccess,
       count: pokemonListResponse.value?.count,
       data: pokemonListData.value
         .map((pokemon) => pokemon.data as Pokemon)

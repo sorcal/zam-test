@@ -61,9 +61,17 @@ watch(
 watch(
   () => pokemonListResponse?.value?.isError,
   (value) => {
-    console.log(value)
     if (value) {
       toast?.showToast('Error loading pokemons', ToastType.error)
+    }
+  },
+)
+
+watch(
+  () => pokemonListResponse?.value?.isSuccess,
+  (value) => {
+    if (value) {
+      toast?.showToast('Pokemon data loaded')
     }
   },
 )

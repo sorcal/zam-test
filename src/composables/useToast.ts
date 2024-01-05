@@ -22,13 +22,13 @@ export function useToast(): UseToastReturnType {
   const showToast = (
     msg: string,
     toastType = ToastType.success,
-    duration = 5000,
+    duration = 3000,
   ) => {
     message.value = msg
     type.value = toastType
     isVisible.value = true
     setTimeout(() => {
-      //   isVisible.value = false
+      isVisible.value = false
     }, duration)
   }
 

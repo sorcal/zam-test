@@ -31,7 +31,7 @@
       <span v-if="abilitiesString" v-text="abilitiesString" />
     </td>
     <td
-      class="relative whitespace-nowrap py-5 pl-3 pr-4 text-right text-sm font-medium sm:pr-0"
+      class="relative whitespace-nowrap py-2 pl-3 pr-4 text-right text-sm font-medium sm:pr-0"
     >
       <RouterLink
         :to="`/pokemons/${pokemon.name}`"
