@@ -52,11 +52,11 @@ export default function initializeRouter(app: App): Router {
   const router: Router = createRouter({
     history: createWebHistory(),
     routes,
-    scrollBehavior(to, from, savedPosition) {
+    scrollBehavior(to) {
       if (to.name === 'Pokemon Details') {
         return { top: 0 }
       }
-      return savedPosition || { top: 0 }
+      return false
     },
   })
 

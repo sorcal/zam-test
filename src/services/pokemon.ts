@@ -27,7 +27,9 @@ export const usePokemonListQuery = (pageRef: Ref<number>) => {
     queryKey: ['pokemonList', page],
     queryFn: async (): Promise<PokemonListResponse> => {
       const response = await fetch(
-        `https://pokeapi.co/api/v2/pokemon?offset=${(page.value - 1) * 20}`,
+        `https://pokeapi.co/api/v2/pokemon?offset=${
+          (page.value - 1) * 20
+        }?limit=1`,
       )
 
       if (!response.ok) {
@@ -39,18 +41,21 @@ export const usePokemonListQuery = (pageRef: Ref<number>) => {
   })
 }
 
-export const usePokemonQuery = (name: string) =>
-  useQuery({
-    queryKey: ['pokemon', name],
-    queryFn: async (): Promise<Pokemon> => {
-      const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${name}`)
-      if (!response.ok) {
-        throw new Error('Network response was not ok')
-      }
-      return response.json()
-    },
-    staleTime: Infinity,
-  })
+export const getPokemonQuery = (name: string) => ({
+  queryKey: ['pokemon', name],
+  queryFn: async (): Promise<Pokemon> => {
+    const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${name}`)
+    if (!response.ok) {
+      throw new Error('Network response was not ok')
+    }
+
+    const jsonData = await response.json()
+    return jsonData
+  },
+  staleTime: Infinity,
+})
+
+export const usePokemonQuery = (name: string) => useQuery(getPokemonQuery(name))
 
 export const usePokemonSpeciesQuery = (name: string) =>
   useQuery({
@@ -67,31 +72,20 @@ export const usePokemonSpeciesQuery = (name: string) =>
     staleTime: Infinity,
   })
 
-export const getPokemonQuery = (name: string) => ({
-  queryKey: ['pokemon', name],
-  queryFn: async (): Promise<Pokemon> => {
-    const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${name}`)
-    if (!response.ok) {
-      throw new Error('Network response was not ok')
-    }
+export const usePokemonListDataQuery = (pageRef: Ref<number> = ref(1)) => {
+  const {
+    data: pokemonListResponse,
+    isFetching,
+    isError,
+  } = usePokemonListQuery(pageRef)
 
-    const jsonData = await response.json()
-    return jsonData
-  },
-  staleTime: Infinity,
-})
-
-export const usePokemonListDataQuery = (
-  pokemonList: Ref<PokemonListResponse | undefined> = ref({
-    count: 0,
-    results: [],
-  }),
-) => {
   const pokemonQueriesOptions = computed(() =>
-    pokemonList?.value
-      ? pokemonList?.value.results.map((pokemon: PokemonListResponseItem) => {
-          return getPokemonQuery(pokemon.name)
-        })
+    pokemonListResponse?.value
+      ? pokemonListResponse?.value.results.map(
+          (pokemon: PokemonListResponseItem) => {
+            return getPokemonQuery(pokemon.name)
+          },
+        )
       : [],
   )
 
@@ -99,20 +93,19 @@ export const usePokemonListDataQuery = (
     queries: pokemonQueriesOptions,
   })
 
-  const pokemonListDataProcessed = computed(() => {
+  return computed(() => {
     const hasFetching = pokemonListData.value.some(
       (pokemon) => pokemon.isFetching,
     )
 
     const hasError = pokemonListData.value.some((pokemon) => pokemon.isError)
     return {
-      isFetching: hasFetching,
-      isError: hasError,
+      isFetching: isFetching.value || hasFetching,
+      isError: isError.value || hasError,
+      count: pokemonListResponse.value?.count,
       data: pokemonListData.value
         .map((pokemon) => pokemon.data as Pokemon)
         .filter((pokemon) => pokemon),
     }
   })
-
-  return pokemonListDataProcessed
 }

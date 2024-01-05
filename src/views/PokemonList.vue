@@ -2,8 +2,8 @@
   <div class="max-w-3xl mx-auto pb-20 w-full px-4 sm:px-6 lg:px-8">
     <h1 class="mt-8 mb-12 text-3xl">Pokemon List</h1>
     <PokemonList
-      :pokemons="pokemonListData?.data || []"
-      :is-data-fetching="isFetching || pokemonListData?.isFetching"
+      :pokemons="pokemonListResponse?.data || []"
+      :is-data-fetching="pokemonListResponse?.isFetching || false"
     />
     <section
       class="mt-4 border-t border-gray-200 pt-4 flex items-center justify-center"
@@ -22,11 +22,7 @@
 <script setup lang="ts">
 import { computed, watch, ref, inject } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import {
-  usePokemonListQuery,
-  PAGE_SIZE,
-  usePokemonListDataQuery,
-} from '../services/pokemon'
+import { PAGE_SIZE, usePokemonListDataQuery } from '../services/pokemon'
 import PokemonList from '../components/pokemons/PokemonList.vue'
 import ListPagination from '../components/common/ListPagination.vue'
 import { ToastType, UseToastReturnType } from '../composables/useToast'
@@ -43,26 +39,18 @@ const currentPage = computed(() =>
   route.query.page ? Number(route.query.page) : 1,
 )
 
-const {
-  data: pokemonListResponse,
-  isFetching,
-  isError,
-} = usePokemonListQuery(currentPage)
-
-const pokemonListData = usePokemonListDataQuery(pokemonListResponse)
+const pokemonListResponse = usePokemonListDataQuery(currentPage)
 
 const pageCount = ref(0)
-
 function setPageCount() {
   pageCount.value = pokemonListResponse?.value?.count
     ? Math.ceil(pokemonListResponse.value.count / PAGE_SIZE)
     : 0
 }
-
 setPageCount()
 
 watch(
-  () => isFetching.value,
+  () => pokemonListResponse?.value?.isFetching,
   (isFetching, oldValue) => {
     if (!isFetching && oldValue) {
       setPageCount()
@@ -70,12 +58,8 @@ watch(
   },
 )
 
-const hasError = computed(() => {
-  return isError.value || pokemonListData.value.isError
-})
-
 watch(
-  () => hasError.value,
+  () => pokemonListResponse?.value?.isError,
   (value) => {
     console.log(value)
     if (value) {
