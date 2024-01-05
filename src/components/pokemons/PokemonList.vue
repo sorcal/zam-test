@@ -31,13 +31,18 @@
             </thead>
             <tbody class="divide-y divide-gray-200">
               <template v-if="isDataFetching">
-                <PokemonListItemLoader v-for="index in 20" :key="index" />
+                <PokemonListItemLoader
+                  v-for="index in 20"
+                  :key="index"
+                  :data-test-id="`pokemon-list-item-loader-${index}`"
+                />
               </template>
               <template v-else-if="pokemons?.length">
                 <PokemonListItem
                   v-for="pokemon in pokemons"
                   :key="pokemon.name"
                   :pokemon="pokemon"
+                  :data-test-id="`pokemon-list-item-${pokemon.name}`"
                 />
               </template>
             </tbody>

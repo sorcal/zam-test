@@ -1,4 +1,4 @@
-import { PokemonStateName } from '../services/pokemon'
+import { PokemonStatName } from '../services/pokemon'
 
 export type PokemonListResponseItem = {
   name: string
@@ -13,7 +13,7 @@ export type PokemonListResponse = {
 export type PokemonStat = {
   base_stat: number
   stat: {
-    name: PokemonStateName
+    name: PokemonStatName
   }
 }
 
@@ -38,8 +38,6 @@ export type PokemonType = {
 export type Pokemon = {
   id: number
   name: string
-  height: number
-  weight: number
   sprites: {
     front_default: string
     other: {

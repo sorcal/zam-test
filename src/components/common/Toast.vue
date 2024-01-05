@@ -4,6 +4,7 @@
       v-if="isVisible"
       class="fixed top-0 right-0 mt-6 mr-6 z-50 px-6 py-4 rounded shadow-md"
       :class="colorClasses[type || ToastType.success]"
+      data-test-id="toast"
     >
       {{ message }}
     </div>

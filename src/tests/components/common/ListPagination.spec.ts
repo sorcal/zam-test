@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest'
 import { mount } from '@vue/test-utils'
-import ListPagination from './ListPagination.vue'
+import ListPagination from '../../../components/common/ListPagination.vue'
 import { createMemoryHistory, createRouter, RouterLink } from 'vue-router'
 
 const router = createRouter({
@@ -70,7 +70,7 @@ describe('ListPagination', () => {
 
   it('renders correct links as buttons', () => {
     function getUrlForPage(page: number) {
-      return `/projects/${page}`
+      return `/pokemons?page=${page}`
     }
     const wrapper = mount(ListPagination, {
       global: {
@@ -83,7 +83,7 @@ describe('ListPagination', () => {
         currentPage: 3,
         pageCount: 5,
         disabled: false,
-        getUrlForPage: getUrlForPage,
+        getUrlForPage,
       },
     })
 

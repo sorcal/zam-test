@@ -9,7 +9,7 @@ import type {
 
 export const PAGE_SIZE = 20
 
-export enum PokemonStateName {
+export enum PokemonStatName {
   hp = 'hp',
   attack = 'attack',
   defense = 'defense',

@@ -81,7 +81,7 @@
 <script setup lang="ts">
 import { computed, watch, inject } from 'vue'
 import { useRoute } from 'vue-router'
-import { usePokemonQuery, PokemonStateName } from '../services/pokemon'
+import { usePokemonQuery, PokemonStatName } from '../services/pokemon'
 import HeartIcon from '../icons/HeartIcon.vue'
 import SpeedIcon from '../icons/SpeedIcon.vue'
 import DefenseIcon from '../icons/DefenseIcon.vue'
@@ -111,20 +111,20 @@ watch(
 )
 
 const iconsComponents = {
-  [PokemonStateName.hp]: HeartIcon,
-  [PokemonStateName.attack]: AttackIcon,
-  [PokemonStateName.defense]: DefenseIcon,
-  [PokemonStateName.specialAttack]: SpecialAttackIcon,
-  [PokemonStateName.specialDefense]: SpecialDefenseIcon,
-  [PokemonStateName.speed]: SpeedIcon,
+  [PokemonStatName.hp]: HeartIcon,
+  [PokemonStatName.attack]: AttackIcon,
+  [PokemonStatName.defense]: DefenseIcon,
+  [PokemonStatName.specialAttack]: SpecialAttackIcon,
+  [PokemonStatName.specialDefense]: SpecialDefenseIcon,
+  [PokemonStatName.speed]: SpeedIcon,
 }
 const iconsColorClass = {
-  [PokemonStateName.hp]: 'text-red-500',
-  [PokemonStateName.attack]: 'text-orange-500',
-  [PokemonStateName.defense]: 'text-green-500',
-  [PokemonStateName.specialAttack]: 'text-purple-500',
-  [PokemonStateName.specialDefense]: 'text-blue-500',
-  [PokemonStateName.speed]: 'text-yellow-500',
+  [PokemonStatName.hp]: 'text-red-500',
+  [PokemonStatName.attack]: 'text-orange-500',
+  [PokemonStatName.defense]: 'text-green-500',
+  [PokemonStatName.specialAttack]: 'text-purple-500',
+  [PokemonStatName.specialDefense]: 'text-blue-500',
+  [PokemonStatName.speed]: 'text-yellow-500',
 }
 
 const typesString = computed(() => getTypesStringFromPokemon(pokemon?.value))
